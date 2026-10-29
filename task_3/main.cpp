@@ -17,6 +17,7 @@
 #include "../common/instance.hpp"
 #include "../common/solution.hpp"
 #include "../task_1/heuristics.hpp"
+#include "../task_2/regret_heuristics.hpp"
 #include "local_search.hpp"
 
 namespace fs = std::filesystem;
@@ -36,10 +37,12 @@ struct Stats {
     double obj_avg, time_min, time_max, time_avg;  // times in ms
 };
 
-// Starting solution for "greedy start" local search.
-// TODO: replace greedy_cycle with the best heuristic from Assignment 2 (regret).
+// Starting solution for "greedy start" local search: the best constructive
+// heuristic from Assignment 2, nn_any with the weighted 2-regret criterion (w = 0.6).
+constexpr float GREEDY_START_WEIGHT = 0.6f;
+
 Solution greedy_start(const Instance& inst, int run) {
-    return greedy_cycle(inst, run % inst.n).tour;
+    return regret_2_nn_any(inst, run % inst.n, GREEDY_START_WEIGHT).tour;
 }
 
 std::vector<Method> build_methods() {
@@ -53,6 +56,23 @@ std::vector<Method> build_methods() {
         {"nn_any", [](const Instance& inst, int run) { return nn_any(inst, run % inst.n); }},
         {"greedy_cycle",
          [](const Instance& inst, int run) { return greedy_cycle(inst, run % inst.n); }},
+        // Assignment 2: regret_weight = 1.0 is pure 2-regret, 0.5 equal weights.
+        {"regret_2_nn",
+         [](const Instance& inst, int run) { return regret_2_nn_any(inst, run % inst.n, 1.0); }},
+        {"regret_2_greedy_cycle",
+         [](const Instance& inst, int run) {
+             return regret_2_greedy_cycle(inst, run % inst.n, 1.0);
+         }},
+        {"regret_2_nn_w05",
+         [](const Instance& inst, int run) { return regret_2_nn_any(inst, run % inst.n, 0.5); }},
+        {"regret_2_greedy_cycle_w05",
+         [](const Instance& inst, int run) {
+             return regret_2_greedy_cycle(inst, run % inst.n, 0.5);
+         }},
+        {"regret_2_nn_w06",
+         [](const Instance& inst, int run) {
+             return regret_2_nn_any(inst, run % inst.n, GREEDY_START_WEIGHT);
+         }},
     };
 
     // The 8 local search variants: search type x intra-route move x starting solution.

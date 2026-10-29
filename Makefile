@@ -34,9 +34,9 @@ plot_task_2:
 
 task_3: build/task_3
 
-build/task_3: task_3/main.cpp task_3/local_search.cpp task_3/local_search.hpp task_1/heuristics.cpp task_1/heuristics.hpp $(COMMON_SRC) $(COMMON_HDR)
+build/task_3: task_3/main.cpp task_3/local_search.cpp task_3/local_search.hpp task_1/heuristics.cpp task_1/heuristics.hpp task_2/regret_heuristics.cpp task_2/regret_heuristics.hpp $(COMMON_SRC) $(COMMON_HDR)
 	@mkdir -p build
-	$(CXX) $(CXXFLAGS) -o $@ task_3/main.cpp task_3/local_search.cpp task_1/heuristics.cpp $(COMMON_SRC)
+	$(CXX) $(CXXFLAGS) -o $@ task_3/main.cpp task_3/local_search.cpp task_1/heuristics.cpp task_2/regret_heuristics.cpp $(COMMON_SRC)
 
 run_task_3: build/task_3
 	./build/task_3 results/task_3 data/TSPA.csv data/TSPB.csv

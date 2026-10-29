@@ -19,11 +19,11 @@ struct Move {
 class State {
 public:
     State(const Instance& inst, const Solution& start)
-        : d(inst.dist), c(inst.cost), k(static_cast<int>(start.size())), tour(start),
-          pos(inst.n, -1) {
-        for (int i = 0; i < k; ++i) pos[tour[i]] = i;
+        : d(inst.dist), c(inst.cost), k(static_cast<int>(start.size())), tour(start) {
+        std::vector<bool> selected(inst.n, false);
+        for (int v : tour) selected[v] = true;
         for (int v = 0; v < inst.n; ++v)
-            if (pos[v] == -1) unselected.push_back(v);
+            if (!selected[v]) unselected.push_back(v);
     }
 
     int num_unselected() const { return static_cast<int>(unselected.size()); }
@@ -51,7 +51,6 @@ private:
     const std::vector<int>& c;
     int k;
     Solution tour;                // selected nodes in cycle order
-    std::vector<int> pos;         // pos[v] = position of v in tour, -1 if not selected
     std::vector<int> unselected;  // nodes not in tour (order does not matter)
 
     int prev(int i) const { return tour[(i - 1 + k) % k]; }
@@ -67,8 +66,6 @@ private:
     void apply_inter(int i, int t) {
         const int u = tour[i], v = unselected[t];
         tour[i] = v;
-        pos[v] = i;
-        pos[u] = -1;
         unselected[t] = u;
     }
 
@@ -90,8 +87,6 @@ private:
 
     void apply_nodes(int i, int j) {
         std::swap(tour[i], tour[j]);
-        pos[tour[i]] = i;
-        pos[tour[j]] = j;
     }
 
     // Remove edges (a, a2) and (b, b2), add (a, b) and (a2, b2):
@@ -103,7 +98,6 @@ private:
 
     void apply_edges(int i, int j) {
         std::reverse(tour.begin() + i + 1, tour.begin() + j + 1);
-        for (int p = i + 1; p <= j; ++p) pos[tour[p]] = p;
     }
 };
 
