@@ -44,5 +44,17 @@ run_task_3: build/task_3
 plot_task_3:
 	python3 scripts/plot.py results/task_3 data/TSPA.csv data/TSPB.csv
 
+task_4: build/task_4
+
+build/task_4: task_4/main.cpp task_4/candidate_moves.cpp task_4/candidate_moves.hpp task_3/local_search.cpp task_3/local_search.hpp task_1/heuristics.cpp task_1/heuristics.hpp $(COMMON_SRC) $(COMMON_HDR)
+	@mkdir -p build
+	$(CXX) $(CXXFLAGS) -o $@ task_4/main.cpp task_4/candidate_moves.cpp task_3/local_search.cpp task_1/heuristics.cpp $(COMMON_SRC)
+
+run_task_4: build/task_4
+	./build/task_4 results/task_4 data/TSPA.csv data/TSPB.csv
+
+plot_task_4:
+	python scripts/plot.py results/task_4 data/TSPA.csv data/TSPB.csv
+
 clean:
 	rm -rf build
