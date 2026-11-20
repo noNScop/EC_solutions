@@ -4,9 +4,9 @@ CXXFLAGS ?= -std=c++17 -O2 -Wall -Wextra -pedantic
 COMMON_SRC = common/instance.cpp common/solution.cpp
 COMMON_HDR = common/instance.hpp common/solution.hpp
 
-.PHONY: all task_1 run_task_1 plot_task_1 task_2 run_task_2 plot_task_2 task_3 run_task_3 plot_task_3 clean
+.PHONY: all task_1 run_task_1 plot_task_1 task_2 run_task_2 plot_task_2 task_3 run_task_3 plot_task_3 task_4 run_task_4 plot_task_4 task_5 run_task_5 plot_task_5 clean
 
-all: task_1 task_2 task_3
+all: task_1 task_2 task_3 task_4 task_5
 
 task_1: build/task_1
 
@@ -58,3 +58,15 @@ plot_task_4:
 
 clean:
 	rm -rf build
+
+task_5: build/task_5
+
+build/task_5: task_5/main.cpp task_5/move_list.cpp task_5/move_list.hpp task_4/candidate_moves.cpp task_4/candidate_moves.hpp task_3/local_search.cpp task_3/local_search.hpp task_1/heuristics.cpp task_1/heuristics.hpp $(COMMON_SRC) $(COMMON_HDR)
+	@mkdir -p build
+	$(CXX) $(CXXFLAGS) -o $@ task_5/main.cpp task_5/move_list.cpp task_4/candidate_moves.cpp task_3/local_search.cpp task_1/heuristics.cpp $(COMMON_SRC)
+
+run_task_5: build/task_5
+	./build/task_5 results/task_5 data/TSPA.csv data/TSPB.csv
+
+plot_task_5:
+	python3 scripts/plot.py results/task_5 data/TSPA.csv data/TSPB.csv

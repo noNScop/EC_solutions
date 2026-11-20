@@ -1,0 +1,7 @@
+instance,method,obj_min,obj_max,obj_avg,time_min_ms,time_max_ms,time_avg_ms
+TSPA,ls_baseline,73575,80012,76145.7,4.83854,11.3022,5.7006
+TSPA,ls_move_list,73955,79964,76207.2,0.925458,1.64783,1.10642
+TSPA,ls_candidates_k10,74144,80830,76354.8,1.90979,2.42583,2.15846
+TSPB,ls_baseline,50225,56791,52754.8,4.92662,7.12275,5.61576
+TSPB,ls_move_list,50450,56177,52697.2,0.87375,1.25879,1.05632
+TSPB,ls_candidates_k10,50289,56770,52761.4,1.88842,2.51437,2.12406
